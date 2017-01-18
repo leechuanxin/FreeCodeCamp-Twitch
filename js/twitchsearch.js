@@ -146,7 +146,7 @@ var main = function() {
 		var dataArr = [];
 
 		for (var a in array) {
-			dataArr.push(new Promise((resolve, reject) => {
+			dataArr.push(new Promise(function(resolve, reject) {
 				var request = new XMLHttpRequest();
 				request.open('GET', 'https://wind-bow.gomix.me/twitch-api/streams/' + streamArr[a], true);
 
@@ -270,13 +270,15 @@ var main = function() {
 	});
 
 	// load api and cards/cells
-	Promise.all(apiPromise(streamArr)).then((result) => loadCells(result));
+	Promise.all(apiPromise(streamArr)).then(function(result) {
+		loadCells(result);
+	});
 
 	searchField.addEventListener("input", function() {
 		showHideCells();
 	});
 
-	refreshButton.addEventListener("click", () => {
+	refreshButton.addEventListener("click", function() {
 		var allCells = contentContainer.querySelectorAll('.mdl-cell');
 		var currentInput = searchField.value.replace(/[!@#\$%\^&\*\(\)\+=\{}\[\]\|\\;'"<>,.?/]/g, '').toLowerCase();
 		
@@ -286,7 +288,9 @@ var main = function() {
 		}
 
 		// load api and cards/cells, then hide/show relevant ones
-		Promise.all(apiPromise(streamArr)).then((result) => loadCells(result)).then(function() {
+		Promise.all(apiPromise(streamArr)).then(function(result) {
+			loadCells(result);
+		}).then(function() {
 			showHideCells();
 		});		
 	});
@@ -398,7 +402,9 @@ var main = function() {
 					allCells[cell].parentNode.removeChild(allCells[cell]);
 				}
     			
-				Promise.all(apiPromise(streamArr)).then((result) => loadCells(result)).then(function() {
+				Promise.all(apiPromise(streamArr)).then(function(result) {
+					loadCells(result);
+				}).then(function() {
 					showHideCells();
 				});
 			}, refreshSlider.value * 1000);
